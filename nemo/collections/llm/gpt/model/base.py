@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import os
 from contextlib import nullcontext
 from dataclasses import dataclass
 from functools import partial
@@ -335,9 +335,10 @@ class GPTConfig(TransformerConfig, io.IOMixin):
                 build_model_context = partial(fp8_model_init, recipe=recipe)
             else:
                 build_model_context = fp8_model_init
-
-        #For MXFP8, the model has to be init in bf16 currently.
-        build_model_context = nullcontext
+                
+        if os.environ.get("USE_MXFP8", "0").lower() in ("1", "true"):
+            #For MXFP8, the model has to be init in bf16 currently.
+            build_model_context = nullcontext
         with build_model_context():
             model = MCoreGPTModel(
                 self,
