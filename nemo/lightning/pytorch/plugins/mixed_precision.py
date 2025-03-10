@@ -122,13 +122,13 @@ class MegatronMixedPrecision(Precision):
         if fp8 is not None:
             te_fp8, HAVE_TE = safe_import("transformer_engine.pytorch.fp8")
             assert HAVE_TE, "FP8 precision requires transformer engine."
-            if fp8_params:
-                te_fp8.FP8GlobalStateManager.FP8_PARAMETERS = True
+            #if fp8_params:
+            #    te_fp8.FP8GlobalStateManager.FP8_PARAMETERS = True
                 # Explicitly set the recipe to delayed scaling.
                 # Otherwise TE v2.0 will assume the default, which is mxfp8 recipe.
-                te_recipe, _ = safe_import("transformer_engine.common.recipe")
-                te_fp8.FP8GlobalStateManager.FP8_RECIPE = te_recipe.DelayedScaling()
-                fp8_param_gather = True
+            #    te_recipe, _ = safe_import("transformer_engine.common.recipe")
+            #    te_fp8.FP8GlobalStateManager.FP8_RECIPE = te_recipe.DelayedScaling()
+            #    fp8_param_gather = True
 
         dtype = torch.bfloat16 if precision in ['bf16', 'bf16-mixed'] else torch.float32
         self.dtype_config = DtypeConfig(
