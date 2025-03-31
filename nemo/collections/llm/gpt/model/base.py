@@ -335,7 +335,8 @@ class GPTConfig(TransformerConfig, io.IOMixin):
                 build_model_context = partial(fp8_model_init, recipe=recipe)
             else:
                 build_model_context = fp8_model_init
-
+        
+        build_model_context = nullcontext
         with build_model_context():
             model = MCoreGPTModel(
                 self,
