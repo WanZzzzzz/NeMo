@@ -628,7 +628,7 @@ class MegatronParallel(nn.ModuleList, Generic[ModelT]):
             overlap_param_gather_with_optimizer_step = False
             if hasattr(self, "optim") and isinstance(self.optim.config, OptimizerConfig):
                 overlap_param_gather_with_optimizer_step = self.optim.config.overlap_param_gather_with_optimizer_step
-            disable_bucketing = (model_chunk_idx > 0) or overlap_param_gather_with_optimizer_step
+            disable_bucketing = (model_chunk_idx > 0) or (self.vp_size and overlap_param_gather_with_optimizer_step)
 
             with init_ddp_context():
                 # Avoid rewrapping the module if it's already wrapped with FSDP
